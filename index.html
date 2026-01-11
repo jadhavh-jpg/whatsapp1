@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Instant WhatsApp Dashboard</title>
+<title>Instant WhatsApp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -19,8 +19,9 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:var(--bg);color:var(--dark)}
+body{background:var(--bg);color:var(--dark);overflow-x:hidden}
 
+/* ===== LAYOUT ===== */
 .app{display:flex;min-height:100vh}
 
 /* ===== SIDEBAR ===== */
@@ -29,8 +30,14 @@ body{background:var(--bg);color:var(--dark)}
   background:linear-gradient(180deg,#064e3b,#022c22);
   color:#ecfdf5;
   padding:24px 18px;
-  transition:.3s;
+  position:fixed;
+  left:-280px;
+  top:0;
+  height:100%;
+  z-index:1000;
+  transition:all .35s cubic-bezier(.4,0,.2,1);
 }
+.sidebar.show{left:0}
 
 .logo{
   display:flex;align-items:center;gap:10px;
@@ -43,70 +50,108 @@ body{background:var(--bg);color:var(--dark)}
 
 .menu a{
   display:block;
-  padding:12px 14px;
-  border-radius:12px;
+  padding:14px;
+  border-radius:14px;
   color:#d1fae5;
   text-decoration:none;
-  margin-bottom:8px;
+  margin-bottom:10px;
+  transition:.25s;
 }
-.menu a.active,.menu a:hover{
-  background:rgba(34,197,94,.15);
-  color:#fff;
+.menu a:hover,
+.menu a.active{
+  background:rgba(34,197,94,.18);
+  transform:translateX(4px);
 }
+
+/* ===== OVERLAY ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  z-index:900;
+}
+.overlay.show{display:block}
 
 /* ===== MAIN ===== */
-.main{flex:1;padding:20px}
+.main{
+  flex:1;
+  padding:20px;
+  margin-left:0;
+}
 
-/* TOP BAR (MOBILE) */
+/* TOP BAR */
 .topbar{
-  display:none;
+  display:flex;
   align-items:center;
   gap:12px;
-  margin-bottom:16px;
+  margin-bottom:18px;
 }
 .menu-btn{
   font-size:26px;
   cursor:pointer;
-  user-select:none;
 }
 .badge{
+  margin-left:auto;
   background:#dcfce7;
   color:#166534;
   padding:6px 14px;
   border-radius:999px;
   font-weight:600;
 }
+.login-btn{
+  background:var(--green);
+  color:#fff;
+  padding:8px 16px;
+  border-radius:999px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.25s;
+}
+.login-btn:hover{transform:scale(1.05)}
 
-/* CONTENT */
+/* HEADER */
 .header{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   margin-bottom:16px;
 }
+
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:2fr 1fr;
   gap:20px;
 }
+
+/* CARD */
 .card{
   background:var(--card);
   border-radius:20px;
   padding:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  box-shadow:0 10px 28px rgba(15,23,42,.08);
 }
 
 /* PREVIEW */
-.preview{background:#ece5dd;border-radius:16px;padding:14px}
+.preview{
+  background:#ece5dd;
+  border-radius:16px;
+  padding:14px;
+}
 .wa-card{
-  background:#fff;border-radius:14px;padding:12px;
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
 }
 .wa-btn{
   background:var(--green);
   color:#fff;
-  text-align:center;
   padding:10px;
   border-radius:10px;
   margin-top:8px;
   font-weight:600;
+  text-align:center;
 }
 
 /* FORM */
@@ -120,35 +165,52 @@ input,textarea{
 }
 textarea{height:90px;resize:none}
 
+/* BUTTONS */
 .actions{display:flex;gap:10px}
 button{
-  border:none;border-radius:999px;
-  padding:14px;font-weight:700;cursor:pointer
+  border:none;
+  border-radius:999px;
+  padding:14px;
+  font-weight:700;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
 }
-.send{background:var(--green);color:#fff;flex:1}
+button::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.25);
+  opacity:0;
+  transition:.25s;
+}
+button:hover::after{opacity:1}
+.send{
+  background:var(--green);
+  color:#fff;
+  flex:1;
+}
 .add{background:var(--panel)}
 
+/* ENVELOPE ANIMATION */
+.envelope{
+  position:fixed;
+  right:40px;
+  bottom:40px;
+  font-size:34px;
+  animation:fly 1s ease forwards;
+}
+@keyframes fly{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-120px) scale(.6);opacity:0}
+}
+
 /* RIGHT */
-.log{display:flex;justify-content:space-between;font-size:14px;margin-top:10px}
+.log{display:flex;justify-content:space-between;margin-top:10px}
 .sent{color:#16a34a;font-weight:600}
 
-/* ===== MOBILE FIX ===== */
+/* MOBILE */
 @media(max-width:900px){
-
-  .topbar{display:flex}
-
-  .sidebar{
-    position:fixed;
-    left:-280px;
-    top:0;
-    height:100%;
-    z-index:1000;
-  }
-
-  .sidebar.show{
-    left:0;
-  }
-
   .grid{grid-template-columns:1fr}
 }
 </style>
@@ -172,28 +234,29 @@ button{
     </nav>
   </aside>
 
+  <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
   <!-- MAIN -->
   <main class="main">
 
-    <!-- MOBILE TOP BAR -->
     <div class="topbar">
       <div class="menu-btn" onclick="toggleMenu()">☰</div>
       <strong>Instant WhatsApp</strong>
-      <div style="margin-left:auto" class="badge">₹99</div>
+      <div class="login-btn">Login</div>
+      <div class="badge">₹99</div>
     </div>
 
     <div class="header">
       <h2>Welcome back, Hari 👋</h2>
-      <div class="badge">Basic Plan · ₹99</div>
     </div>
 
     <div class="grid">
 
-      <!-- LEFT -->
       <div class="card">
         <h3>Create WhatsApp Message</h3>
 
         <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px">
+
           <div class="preview">
             <div class="wa-card">
               <strong id="pTitle">Media Expo Mumbai 2026</strong>
@@ -221,20 +284,17 @@ button{
 
             <div class="actions">
               <button class="add">+ Add</button>
-              <button class="send">Send</button>
+              <button class="send" onclick="sendMsg()">Send Message</button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT -->
       <div class="card">
         <h3>Basic Plan</h3>
         <p style="color:var(--muted)">500 messages remaining</p>
-
-        <h4 style="margin-top:16px">Recent Logs</h4>
+        <h4 style="margin-top:14px">Recent Logs</h4>
         <div class="log"><span>20 Mar 2024</span><span class="sent">Sent</span></div>
-        <div class="log"><span>19 Mar 2024</span><span class="sent">Sent</span></div>
       </div>
 
     </div>
@@ -242,8 +302,29 @@ button{
 </div>
 
 <script>
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+
 function toggleMenu(){
-  document.getElementById('sidebar').classList.toggle('show');
+  sidebar.classList.add('show');
+  overlay.classList.add('show');
+}
+
+function closeMenu(){
+  sidebar.classList.remove('show');
+  overlay.classList.remove('show');
+}
+
+document.querySelectorAll('.menu a').forEach(a=>{
+  a.onclick = closeMenu;
+});
+
+function sendMsg(){
+  const env = document.createElement('div');
+  env.className = 'envelope';
+  env.innerHTML = '✉️';
+  document.body.appendChild(env);
+  setTimeout(()=>env.remove(),1000);
 }
 </script>
 
