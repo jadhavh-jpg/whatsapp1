@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Instant WhatsApp Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --green:#22c55e;
+  --dark:#0f172a;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --muted:#64748b;
+  --border:#e5e7eb;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif}
+body{background:var(--bg);color:var(--dark)}
+
+.app{display:flex;min-height:100vh}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:260px;
+  background:#052e2b;
+  color:#fff;
+  padding:24px 18px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-size:20px;font-weight:800;margin-bottom:32px;
+}
+.logo span{
+  background:var(--green);
+  padding:8px;border-radius:10px;
+}
+.menu a{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  border-radius:12px;
+  color:#e5e7eb;
+  text-decoration:none;
+  margin-bottom:8px;
+  font-weight:500;
+}
+.menu a.active,.menu a:hover{
+  background:#064e3b;
+  color:#fff;
+}
+
+/* ===== MAIN ===== */
+.main{
+  flex:1;
+  padding:28px;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+}
+.header h2{font-size:24px}
+.badge{
+  background:#dcfce7;
+  color:#166534;
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:600;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:24px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/* WHATSAPP PREVIEW */
+.preview{
+  background:#e5ddd5;
+  border-radius:18px;
+  padding:14px;
+}
+.wa-card{
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  max-width:320px;
+}
+.wa-card h4{font-size:15px;margin-bottom:6px}
+.wa-card p{font-size:14px;color:#334155}
+.wa-btn{
+  display:block;
+  background:var(--green);
+  color:#fff;
+  text-align:center;
+  padding:10px;
+  border-radius:10px;
+  margin-top:8px;
+  font-weight:600;
+}
+
+/* FORM */
+label{font-size:13px;color:var(--muted)}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  margin-top:6px;
+  margin-bottom:14px;
+}
+textarea{resize:none;height:90px}
+
+.actions{
+  display:flex;
+  gap:10px;
+}
+button{
+  border:none;
+  border-radius:999px;
+  padding:14px 18px;
+  font-weight:700;
+  cursor:pointer;
+}
+.send{background:var(--green);color:#fff;flex:1}
+.add{background:#f1f5f9}
+
+/* RIGHT PANEL */
+.plan h3{margin-bottom:6px}
+.plan p{color:var(--muted);font-size:14px}
+.upgrade{
+  background:var(--green);
+  color:#fff;
+  margin-top:14px;
+  width:100%;
+}
+
+/* LOGS */
+.log{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.sent{color:green;font-weight:600}
+
+/* MOBILE */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span>🟢</span> Instant WhatsApp
+    </div>
+    <nav class="menu">
+      <a class="active">Dashboard</a>
+      <a>Create Message</a>
+      <a>Message Logs</a>
+      <a>Billing</a>
+      <a>Support</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="header">
+      <h2>Welcome back, Hari 👋</h2>
+      <div class="badge">Basic Plan · ₹99</div>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT -->
+      <div class="card">
+        <h3>Create WhatsApp Message</h3>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:18px">
+
+          <!-- PREVIEW -->
+          <div class="preview">
+            <div class="wa-card">
+              <h4 id="pTitle">Media Expo Mumbai 2026</h4>
+              <p id="pMsg">Visitor Registration is now open.</p>
+              <div class="wa-btn" id="pBtn1">Register Now</div>
+              <div class="wa-btn" id="pBtn2">Read More</div>
+            </div>
+          </div>
+
+          <!-- FORM -->
+          <div style="flex:1;min-width:260px">
+            <label>Message Title</label>
+            <input value="Media Expo Mumbai 2026" oninput="pTitle.innerText=this.value">
+
+            <label>Message Text</label>
+            <textarea oninput="pMsg.innerText=this.value">Visitor Registration is now open.</textarea>
+
+            <label>Button 1</label>
+            <input value="Register Now" oninput="pBtn1.innerText=this.value">
+
+            <label>Button 2</label>
+            <input value="Read More" oninput="pBtn2.innerText=this.value">
+
+            <label>Recipients</label>
+            <input placeholder="+91 9876543210">
+
+            <div class="actions">
+              <button class="add">+ Add Button</button>
+              <button class="send">Send Message</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card plan">
+        <h3>Basic Plan</h3>
+        <p>₹99 / month</p>
+        <p>500 messages remaining</p>
+        <button class="upgrade">Upgrade Plan</button>
+
+        <h4 style="margin-top:22px">Recent Logs</h4>
+        <div class="log">
+          <span>20 Mar 2024</span>
+          <span class="sent">Sent</span>
+        </div>
+        <div class="log">
+          <span>19 Mar 2024</span>
+          <span class="sent">Sent</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
